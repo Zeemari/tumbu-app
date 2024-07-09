@@ -29,8 +29,10 @@ Welcome to the Zeekart Shopping App, a React Native application designed with a 
 ## Installation
 
 1. Clone the repository:
-   ```bash git clone https://github.com/Zeemari/zeekart-shoppingapp.git
+   ```bash 
+   git clone https://github.com/Zeemari/zeekart-shoppingapp.git
    ```
+
 2. Navigate to the project directory:
    ```bash
    cd zeekart-shoppingapp
