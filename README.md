@@ -20,7 +20,7 @@ Welcome to the Zeekart Shopping App, a React Native application designed with a 
 ## Screenshots
 
 ### Welcome Screen
-![Checkout Screen](screenshots/Screenshot_zeekart.png)
+![Zeekart Screen](screenshots/Screenshot_zeekart.png)
 
 ### Products Screen
 ![Products Screen](screenshots/Screenshot_products.png)
