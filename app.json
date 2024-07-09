@@ -21,7 +21,9 @@
         "backgroundColor": "#5a5a5a"
       },
       "package": "com.drsaffas.zeekart",
-      "permissions" : ["INTERNET"]
+      "permissions": [
+        "INTERNET"
+      ]
     },
     "web": {
       "favicon": "./assets/cart.jpg"
@@ -34,8 +36,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "22720e10-ecb8-4f6d-a6c1-db8eb07bcdf4"
+        "projectId": "f4561dd2-419b-4f1d-b9d1-6429b6ca426b"
       }
-    }
+    },
+    "owner": "zeemari"
   }
 }

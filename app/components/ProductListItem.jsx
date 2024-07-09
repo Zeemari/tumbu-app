@@ -1,18 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 
-const ProductListItem = ({ item }) => {
+const ProductListItem = ({ product }) => {
   const baseUrl = 'https://api.timbu.cloud/images/';
   return (
     <View style={styles.productContainer}>
       <Image 
-          source={{ uri: item.photos.length > 0 ? baseUrl + item.photos[0].url : 'https://via.placeholder.com/150' }} 
+        source={{ uri: product.photos.length > 0 ? baseUrl + product.photos[0].url : 'https://via.placeholder.com/150' }} 
         style={styles.productImage} 
+        resizeMode="cover" // or "contain"
       />
       <View style={styles.productDetails}>
-        <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.productDescription}>{item.description}</Text>
-        {product.selling_price && <Text style={styles.productPrice}>Price: ${item.selling_price}</Text>}
+        <Text style={styles.productName}>{product.name}</Text>
+        <Text style={styles.productDescription}>{product.description || 'No description available.'}</Text>
+        {product.selling_price && <Text style={styles.productPrice}>Price: ${product.selling_price}</Text>}
       </View>
     </View>
   );
@@ -34,6 +35,8 @@ const styles = StyleSheet.create({
   productImage: {
     width: '100%',
     height: 200,
+    // Ensure the image is proportionally scaled
+    aspectRatio: 1, // Adjust the aspect ratio as needed
   },
   productDetails: {
     padding: 16,

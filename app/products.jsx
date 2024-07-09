@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, ActivityIndicator, Text, Alert } from 'react-native';
 import ProductListItem from './components/ProductListItem';
-import { fetchProducts } from './api';
+import { fetchProducts } from './api'; // Ensure correct path to your fetchProducts function
 
 export default function ProductsScreen() {
   const [products, setProducts] = useState([]);
@@ -9,7 +9,7 @@ export default function ProductsScreen() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProductsData = async () => {
       try {
         const productsData = await fetchProducts();
         setProducts(productsData);
@@ -21,7 +21,7 @@ export default function ProductsScreen() {
       }
     };
 
-    fetchProducts();
+    fetchProductsData();
   }, []);
 
   if (loading) {
@@ -29,7 +29,7 @@ export default function ProductsScreen() {
   }
 
   if (error) {
-    return <Text style={styles.error}>{error}</Text>;
+    return <View style={styles.errorContainer}><Text style={styles.error}>{error}</Text></View>;
   }
 
   return (
@@ -38,6 +38,7 @@ export default function ProductsScreen() {
         data={products}
         renderItem={({ item }) => <ProductListItem product={item} />}
         keyExtractor={item => item.id.toString()}
+        contentContainerStyle={styles.listContent}
       />
     </View>
   );
@@ -53,10 +54,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  error: {
+  errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  error: {
     color: 'red',
+    fontSize: 16,
+  },
+  listContent: {
+    paddingBottom: 20,
   },
 });
