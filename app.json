@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "zeekart",
-    "slug": "zeekart",
+    "name": "timbu-app",
+    "slug": "timbu-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/cart.jpg",
@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/cart.jpg",
         "backgroundColor": "#5a5a5a"
       },
-      "package": "com.drsaffas.zeekart",
+      "package": "com.zeemari.timbuapp",
       "permissions": [
         "INTERNET"
       ]
@@ -36,7 +36,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "f4561dd2-419b-4f1d-b9d1-6429b6ca426b"
+        "projectId": "07f7f257-53f9-4e6f-9660-df33dbe56920"
       }
     },
     "owner": "zeemari"

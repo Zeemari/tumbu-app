@@ -1,6 +1,6 @@
-# Zeekart Shopping App
+# Timbu Shopping App
 
-Welcome to the Zeekart Shopping App, a React Native application designed with a user-friendly interface featuring a bottom navigation bar and essential functionalities for browsing luxury bags and managing a shopping cart.
+Welcome to the Timbu Shopping App, a React Native application designed with a user-friendly interface of a Figma UI design featuring all products, cart and .
 
 ## Table of Contents
 
@@ -13,29 +13,35 @@ Welcome to the Zeekart Shopping App, a React Native application designed with a 
 
 ## Features
 
-- **Welcome Screen**: View items added to the cart and proceed to checkout.
-- **Products Screen**: Browse and view a list of products.
+- **Design Screen**: View UI implemented with the figma design.
+- **All Products Screen**: Browse and view a list of products.
+- **Cart**: Browse and view a list items added to cart.
 
 
 ## Screenshots
 
-### Welcome Screen
-![Zeekart Screen](screenshots/Screenshot_zeekart.png)
+### Design Screen
+![Design Screen](screenshots/productdesign.jpeg)
+![Design Screen](screenshots/design.jpeg)
+![Design Screen](screenshots/design2.jpeg)
 
 ### Products Screen
-![Products Screen](screenshots/Screenshot_products.png)
+![Products Screen](screenshots/allproducts.jpeg)
+
+### Cart Screen
+![Cart Screen](screenshots/cart.jpeg)
 
 
 ## Installation
 
 1. Clone the repository:
    ```bash 
-   git clone https://github.com/Zeemari/zeekart-shoppingapp.git
+   https://github.com/Zeemari/tumbu-app.git
    ```
 
 2. Navigate to the project directory:
    ```bash
-   cd zeekart-shoppingapp
+   cd tumbu-app
    ```
 3. Install dependencies:
    ```bash
@@ -53,11 +59,11 @@ Welcome to the Zeekart Shopping App, a React Native application designed with a 
 
 ## APK Download
 
-You can download the APK file [here](https://drive.google.com/file/d/1oJB4TKw6yN3LbbA8MDLIRdqZAa5iFg4u/view?usp=drive_link).
+You can download the APK file [here](https://drive.google.com/file/d/1s0oVYzZ0ZUo7nBNuP1r7mlmun3l_eJJu/view?usp=drive_link).
 
 ## Live Demo
 
-Check out the live demo on Appetize.io [here](https://appetize.io/app/android/com.drsaffas.zeekart?device=pixel7&osVersion=13.0).
+Check out the live demo on Appetize.io [here](https://appetize.io/app/b_eczffq2tfjtd4prdwgij6k24uq?device=pixel7&osVersion=13.0).
 
 ## Contributing
 

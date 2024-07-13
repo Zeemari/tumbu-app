@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, ActivityIndicator, Text, Alert } from 'react-native';
 import ProductListItem from './components/ProductListItem';
-import { fetchProducts } from './api'; // Ensure correct path to your fetchProducts function
+import { fetchProducts } from './api';
 
 export default function ProductsScreen() {
   const [products, setProducts] = useState([]);
