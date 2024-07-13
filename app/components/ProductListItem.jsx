@@ -35,8 +35,7 @@ const styles = StyleSheet.create({
   productImage: {
     width: '100%',
     height: 200,
-    // Ensure the image is proportionally scaled
-    aspectRatio: 1, // Adjust the aspect ratio as needed
+    aspectRatio: 1,
   },
   productDetails: {
     padding: 16,
