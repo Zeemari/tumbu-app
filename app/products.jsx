@@ -1,69 +1,69 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, StyleSheet, ActivityIndicator, Text, Alert } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import ProductListItem from './components/ProductListItem';
 import { fetchProducts } from './api';
 
-export default function ProductsScreen() {
+const ProductsScreen = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [cart, setCart] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    const fetchProductsData = async () => {
-      try {
-        const productsData = await fetchProducts();
-        setProducts(productsData);
-      } catch (error) {
-        setError('Failed to load products');
-        Alert.alert('Error', 'Failed to load products. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProductsData();
+    fetchProducts().then(data => setProducts(data));
   }, []);
 
-  if (loading) {
-    return <ActivityIndicator size="large" style={styles.loading} />;
-  }
+  const handleAddToCart = (product, quantity) => {
+    const existingProduct = cart.find(item => item.id === product.id);
+    if (existingProduct) {
+      const updatedCart = cart.map(item =>
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
+      );
+      setCart(updatedCart);
+    } else {
+      setCart([...cart, { ...product, quantity }]);
+    }
+  };
 
-  if (error) {
-    return <View style={styles.errorContainer}><Text style={styles.error}>{error}</Text></View>;
-  }
+  const handleOnPress = (product) => {
+    navigation.navigate('ProductDetails', { product });
+  };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={products}
-        renderItem={({ item }) => <ProductListItem product={item} />}
-        keyExtractor={item => item.id.toString()}
-        contentContainerStyle={styles.listContent}
-      />
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.title}>Products</Text>
+        <FlatList
+          data={products}
+          renderItem={({ item }) => (
+            <ProductListItem
+              product={item}
+              onAddToCart={handleAddToCart}
+              onPress={() => handleOnPress(item)}
+            />
+          )}
+          keyExtractor={item => item.id.toString()}
+          contentContainerStyle={styles.listContent}
+        />
+      </View>
+    </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 10,
+    padding: 16,
   },
-  loading: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  error: {
-    color: 'red',
-    fontSize: 16,
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   listContent: {
     paddingBottom: 20,
   },
 });
+
+export default ProductsScreen;

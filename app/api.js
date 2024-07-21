@@ -9,9 +9,9 @@ const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${API_KEY}`, // Use consistent casing for constants
+    'Authorization': `Bearer ${API_KEY}`,
   },
-  timeout: 10000 // Set a timeout of 10 seconds
+  timeout: 10000
 });
 
 export const fetchProducts = async () => {
@@ -40,3 +40,105 @@ export const fetchProducts = async () => {
     throw error;
   }
 };
+
+export const fetchSpecialOffers = async () => {
+  try {
+    const response = await api.get('/products', {
+      params: {
+        organization_id: ORGANIZATION_ID,
+        page: 1,
+        size: 50,
+        Appid: APP_ID,
+        Apikey: API_KEY,
+      },
+    });
+    return response.data.items; // Return only the items array
+  } catch (error) {
+    if (error.response) {
+      console.error('Error response:', error.response.data);
+      console.error('Error status:', error.response.status);
+      console.error('Error headers:', error.response.headers);
+    } else if (error.request) {
+      console.error('Error request:', error.request);
+    } else {
+      console.error('Error message:', error.message);
+    }
+    throw error;
+  }
+};
+
+export const fetchFeaturedSneakers = async () => {
+  try {
+    const response = await api.get('/products', {
+      params: {
+        organization_id: ORGANIZATION_ID,
+        page: 1,
+        size: 50,
+        Appid: APP_ID,
+        Apikey: API_KEY,
+      },
+    });
+    return response.data.items; // Return only the items array
+  } catch (error) {
+    if (error.response) {
+      console.error('Error response:', error.response.data);
+      console.error('Error status:', error.response.status);
+      console.error('Error headers:', error.response.headers);
+    } else if (error.request) {
+      console.error('Error request:', error.request);
+    } else {
+      console.error('Error message:', error.message);
+    }
+    throw error;
+  }
+};
+
+export const fetchData = async () => {
+  try {
+    const response = await api.get('/products', {
+      params: {
+        organization_id: ORGANIZATION_ID,
+        page: 1,
+        size: 50,
+        Appid: APP_ID,
+        Apikey: API_KEY,
+      },
+    });
+    return response.data.items; // Return only the items array
+  } catch (error) {
+    if (error.response) {
+      console.error('Error response:', error.response.data);
+      console.error('Error status:', error.response.status);
+      console.error('Error headers:', error.response.headers);
+    } else if (error.request) {
+      console.error('Error request:', error.request);
+    } else {
+      console.error('Error message:', error.message);
+    }
+    throw error;
+  }
+};
+
+export const fetchProductDetails = async (productId) => {
+  try {
+    const response = await api.get(`/products/${productId}`, {
+      params: {
+        Appid: APP_ID,
+        Apikey: API_KEY,
+      },
+    });
+    return response.data; // Return the product details
+  } catch (error) {
+    if (error.response) {
+      console.error('Error response:', error.response.data);
+      console.error('Error status:', error.response.status);
+      console.error('Error headers:', error.response.headers);
+    } else if (error.request) {
+      console.error('Error request:', error.request);
+    } else {
+      console.error('Error message:', error.message);
+    }
+    throw error;
+  }
+};
+

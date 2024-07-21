@@ -164,7 +164,9 @@ export default function Layout() {
 
       <Tabs.Screen name="api" options={{ href: null }} />
       <Tabs.Screen name="components/ProductListItem" options={{ href: null }} />
+      <Tabs.Screen name="components/ProductDetails" options={{ href: null, headerShown: false }} />
+      <Tabs.Screen name="app" options={{ href: null }} />
+      <Tabs.Screen name="routes/app" options={{href: null}} />
     </Tabs>
-    
   );
 }

@@ -1,6 +1,6 @@
 # Timbu Shopping App
 
-Welcome to the Timbu Shopping App, a React Native application designed with a user-friendly interface of a Figma UI design featuring all products, cart and .
+Welcome to the Timbu Shopping App, a React Native application with a user-friendly interface inspired by a Figma UI design. The app features a home page with a slider showcasing various items and special offers, as well as highlighted products. Despite the challenges, I have worked hard to implement few of  the requirements and i will continue to strive for improvement in mobile development.
 
 ## Table of Contents
 
@@ -13,23 +13,31 @@ Welcome to the Timbu Shopping App, a React Native application designed with a us
 
 ## Features
 
-- **Design Screen**: View UI implemented with the figma design.
-- **All Products Screen**: Browse and view a list of products.
-- **Cart**: Browse and view a list items added to cart.
-
+- **Design Screen**: UI implemented based on the Figma design, with items fetched from the Timbu Cloud API.
+- **All Products Screen**: Browse and view a list of products where a user can increase and decrease number of items and successfully add to cart.
+- **Cart**: View and manage items added to the cart and proceed to checkout.
+- **Product Details Screeen**: View detailed information about a specific product and add it to the cart.
+Screen.
 
 ## Screenshots
 
-### Design Screen
-![Design Screen](screenshots/productdesign.jpeg)
-![Design Screen](screenshots/design.jpeg)
-![Design Screen](screenshots/design2.jpeg)
+### Home Screen
+![Home Screen](screenshots/zeekart_hero.PNG)
 
 ### Products Screen
-![Products Screen](screenshots/allproducts.jpeg)
+![Products Screen](screenshots/all_products.PNG)
+
+### Special Offers Screen
+![Special Offers Screen](screenshots/special_offers.PNG)
+
+### Featured Products Screen
+![Featured Products Screen](screenshots/featured_bags.PNG)
+
+### Product Details Screen
+![Product Details Screen](screenshots/product_details.PNG)
 
 ### Cart Screen
-![Cart Screen](screenshots/cart.jpeg)
+![Cart Screen](screenshots/my_cart.PNG)
 
 
 ## Installation
@@ -59,11 +67,11 @@ Welcome to the Timbu Shopping App, a React Native application designed with a us
 
 ## APK Download
 
-You can download the APK file [here](https://drive.google.com/file/d/1s0oVYzZ0ZUo7nBNuP1r7mlmun3l_eJJu/view?usp=drive_link).
+You can download the APK file [here](https://drive.google.com/file/d/1yndlqwXJfyvduvmSHjjhrAPVVYwUAtDL/view?usp=sharing).
 
 ## Live Demo
 
-Check out the live demo on Appetize.io [here](https://appetize.io/app/b_eczffq2tfjtd4prdwgij6k24uq?device=pixel7&osVersion=13.0).
+Check out the live demo on Appetize.io [here](https://appetize.io/app/b_j6om2tjy2lkhnd54xkpbdzmaey?device=pixel7&osVersion=13.0).
 
 ## Contributing
 

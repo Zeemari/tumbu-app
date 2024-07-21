@@ -1,9 +1,31 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const ProductListItem = ({ product }) => {
+const ProductListItem = ({ product, onAddToCart, onPress }) => {
+  const [quantity, setQuantity] = useState(1);
   const baseUrl = 'https://api.timbu.cloud/images/';
+
+  const handleIncrease = () => {
+    setQuantity(prevQuantity => prevQuantity + 1);
+  };
+
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      setQuantity(prevQuantity => prevQuantity - 1);
+    }
+  };
+
+  const handleAddToCart = () => {
+    try {
+      const productToAdd = { ...product, quantity };
+      onAddToCart(productToAdd);
+      Alert.alert('Success', 'Product added to cart successfully!');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to add product to cart.');
+      console.error(error);
+    }
+  };
 
   const renderPhotos = () => {
     if (!product.photos || product.photos.length === 0) {
@@ -53,7 +75,7 @@ const ProductListItem = ({ product }) => {
       <View style={styles.productDetails}>
         <Text style={styles.productBrand}>Iconic Casual Brands</Text>
         <Text style={styles.productName}>{product.name}</Text>
-        <Text style={styles.productPrice}>₦ {product.selling_price}</Text>
+        <Text style={styles.productPrice}>USD {product.selling_price}</Text>
         <View style={styles.ratingContainer}>
           <Text style={styles.soldText}>{product.sold} sold</Text>
           <View style={styles.rating}>
@@ -71,13 +93,21 @@ const ProductListItem = ({ product }) => {
           {renderColors()}
         </View>
         <Text style={styles.sectionTitle}>Quantity</Text>
-        <View style={styles.quantityContainer}>
-          <TouchableOpacity style={styles.quantityButton}>
-            <Text style={styles.quantityButtonText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.quantityText}>1</Text>
-          <TouchableOpacity style={styles.quantityButton}>
-            <Text style={styles.quantityButtonText}>+</Text>
+        <View style={styles.cartStyle}>
+          <View style={styles.quantityContainer}>
+            <TouchableOpacity style={styles.quantityButton} onPress={handleDecrease}>
+              <Text style={styles.quantityButtonText}>-</Text>
+            </TouchableOpacity>
+            <Text style={styles.quantityText}>{quantity}</Text>
+            <TouchableOpacity style={styles.quantityButton} onPress={handleIncrease}>
+              <Text style={styles.quantityButtonText}>+</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleAddToCart}
+          >
+            <Text style={styles.buttonText}>Add to cart</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -86,7 +116,7 @@ const ProductListItem = ({ product }) => {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   productContainer: {
@@ -103,8 +133,8 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   productImage: {
-    width: 300, // Adjust accordingly
-    height: 200, // Adjust accordingly
+    width: 300,
+    height: 200,
   },
   productDetails: {
     padding: 16,
@@ -151,6 +181,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginVertical: 4,
+    marginTop: 10,
   },
   sizeContainer: {
     flexDirection: 'row',
@@ -214,6 +245,22 @@ const styles = StyleSheet.create({
     top: 16,
     right: 16,
   },
+  button: {
+    backgroundColor: "#0072C6",
+    borderRadius: 5,
+    padding: 10,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  cartStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  }
 });
 
 export default ProductListItem;

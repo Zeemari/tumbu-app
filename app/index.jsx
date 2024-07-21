@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,99 +8,38 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Pressable,
 } from "react-native";
 import Svg, { Path, Rect } from "react-native-svg";
+import { useNavigation } from "@react-navigation/native";
+import {
+  fetchFeaturedSneakers,
+  fetchSpecialOffers,
+  fetchProducts,
+  fetchData
+} from "./api";
 
 const SLIDER_WIDTH = Dimensions.get("window").width;
 const ITEM_WIDTH = SLIDER_WIDTH * 0.75;
 
-const data = [
-  {
-    title: "Iconic Casual Brands",
-    price: "₦37,000.00",
-    image: require("../assets/icons/pair-trainers.png"),
-  },
-  {
-    title: "Iconic Casual Brands",
-    price: "₦37,000.00",
-    image: require("../assets/icons/pair-trainers.png"),
-  },
-  {
-    title: "Iconic Casual Brands",
-    price: "₦37,000.00",
-    image: require("../assets/icons/pair-trainers.png"),
-  },
-];
-
-const specialOffersData = [
-  {
-    title: "Athletic/Sportswear",
-    description: "Air Jordan running wear",
-    image: require("../assets/icons/victor-olamide-ajibola-5emTz0Gv2rI-unsplash-removebg-preview.png"),
-    price: "₦28,000.00",
-  },
-  {
-    title: "Luxury Fashion Brands",
-    description: "Air Jordan running wear",
-    image: require("../assets/icons/pair-trainers.png"),
-    price: "₦48,500.00",
-  },
-  {
-    title: "Athletic/Sportswear",
-    description: "Air Jordan running wear",
-    image: require("../assets/icons/pexels-craytive-1456738-removebg-preview.png"),
-    price: "₦28,000.00",
-  },
-  {
-    title: "Luxury Fashion Brands",
-    description: "Air Jordan running wear",
-    image: require("../assets/icons/pexels-craytive-1456721-removebg-preview.png"),
-    price: "₦48,500.00",
-  },
-];
-
-const featuredSneakersData = [
-  {
-    title: "Athletic/Sportswear",
-    description: "Air Jordan running wear",
-    image: require("../assets/icons/pair-trainers.png"),
-    price: "₦28,000.00",
-  },
-  {
-    title: "Luxury Fashion Brands",
-    description: "Air Jordan running wear",
-    image: require("../assets/icons/sport-running-shoes.png"),
-    price: "₦48,500.00",
-  },
-  {
-    title: "Athletic/Sportswear",
-    description: "Air Jordan running wear",
-    image: require("../assets/icons/pexels-craytive-1456738-removebg-preview (1).png"),
-    price: "₦28,000.00",
-  },
-  {
-    title: "Luxury Fashion Brands",
-    description: "Air Jordan running wear",
-    image: require("../assets/icons/woman-white-background-model-shoe.png"),
-    price: "₦48,500.00",
-  },
-  {
-    title: "Athletic/Sportswear",
-    description: "Air Jordan running wear",
-    image: require("../assets/icons/Black_Sneakers_on_Yellow_Background-removebg-preview.png"),
-    price: "₦28,000.00",
-  },
-  {
-    title: "Luxury Fashion Brands",
-    description: "Air Jordan running wear",
-    image: require("../assets/icons/irene-kredenets-dwKiHoqqxk8-unsplash-removebg-preview.png"),
-    price: "₦48,500.00",
-  },
-];
-
 export default function Index() {
   const flatListRef = useRef();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [featuredSneakersData, setFeaturedSneakersData] = useState([]);
+  const [specialOffersData, setSpecialOffersData] = useState([]);
+  const [data, setData] = useState([]);
+
+  const baseUrl = "https://api.timbu.cloud/images";
+
+  useEffect(() => {
+    fetchProducts().then((data) => setProducts(data));
+    fetchSpecialOffers().then((data) => setSpecialOffersData(data));
+    fetchFeaturedSneakers().then((data) => setFeaturedSneakersData(data));
+    fetchData().then((data) => setData(data));
+  }, []);
+
+  const navigation = useNavigation();
 
   const handleScroll = (event) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
@@ -108,12 +47,17 @@ export default function Index() {
     setCurrentIndex(index);
   };
 
+  const handleOnPress = (navigation, item) => {
+    navigation.navigate('components/ProductDetails', { item });
+  };   
+
+
   const renderItem = ({ item, index }) => (
     <View key={index} style={styles.itemContainer}>
-      <Image source={item.image} style={styles.image} />
+      <Image source={{ uri:`${baseUrl}/${item.photos?.[0]?.url}` }} style={styles.image} />
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.price}>{item.price}</Text>
+        <Text style={styles.title}>{item.name}</Text>
+            <Text style={styles.price}>{item.price | '0'} USD</Text>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Add to cart</Text>
         </TouchableOpacity>
@@ -121,169 +65,175 @@ export default function Index() {
     </View>
   );
 
-  const renderSpecialOfferItem = ({ item, index }) => (
-    <View key={index} style={styles.specialOfferItemContainer}>
-      <View style={styles.imageColor}>
-        <View style={styles.likeStyle}>
-          <Svg
-            width={32}
-            height={31}
-            viewBox="0 0 32 31"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <Rect
-              x={0.5}
-              width={30.8}
-              height={30.8}
-              rx={15.4}
-              fill="#000"
-              fillOpacity={0.6}
-            />
-            <Path
-              d="M21.497 9.396c-2.01-1.234-3.766-.737-4.82.055-.433.325-.65.487-.777.487s-.343-.162-.775-.487c-1.055-.792-2.81-1.29-4.822-.055-2.64 1.619-3.236 6.96 2.852 11.466 1.16.859 1.74 1.288 2.745 1.288 1.006 0 1.586-.43 2.746-1.287 6.088-4.507 5.49-9.848 2.851-11.467z"
-              stroke="#fff"
-              strokeWidth={1.5}
-              strokeLinecap="round"
-            />
-          </Svg>
+  const renderSpecialOfferItem = ({ item, index, navigation }) => {
+    return (
+      <Pressable key={index} style={styles.specialOfferItemContainer} onPress={() => handleOnPress(navigation, item)}>
+        <View>
+          <View style={styles.imageColor}>
+            <View style={styles.likeStyle}>
+              <Svg
+                width={32}
+                height={31}
+                viewBox="0 0 32 31"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <Rect
+                  x={0.5}
+                  width={30.8}
+                  height={30.8}
+                  rx={15.4}
+                  fill="#000"
+                  fillOpacity={0.6}
+                />
+                <Path
+                  d="M21.497 9.396c-2.01-1.234-3.766-.737-4.82.055-.433.325-.65.487-.777.487s-.343-.162-.775-.487c-1.055-.792-2.81-1.29-4.822-.055-2.64 1.619-3.236 6.96 2.852 11.466 1.16.859 1.74 1.288 2.745 1.288 1.006 0 1.586-.43 2.746-1.287 6.088-4.507 5.49-9.848 2.851-11.467z"
+                  stroke="#fff"
+                  strokeWidth={1.5}
+                  strokeLinecap="round"
+                />
+              </Svg>
+            </View>
+            <Image source={{ uri: `${baseUrl}/${item.photos?.[0]?.url}` }} style={styles.specialOfferImage} />
+          </View>
+          <View style={styles.specialOfferTextContainer}>
+            <Text style={styles.description}>{item.name}</Text>
+            <Text style={styles.specialOfferTitle}>{item.description}</Text>
+            <View style={styles.ratingStyle}>
+              <Svg
+                width={12}
+                height={12}
+                viewBox="0 0 12 12"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <Path
+                  d="M6 1l.002 8.702c-.18 0-.36.04-.496.12l-1.495.893c-1.075.64-1.72.166-1.44-1.059l.355-1.547c.065-.293-.05-.7-.26-.913l-1.24-1.25c-.734-.736-.494-1.482.526-1.653l1.594-.267c.27-.046.59-.283.71-.53l.88-1.774c.237-.48.55-.721.864-.722z"
+                  fill="orange"
+                />
+                <Path
+                  d="M6 1l.002 8.702c-.18 0-.36.04-.496.12l-1.495.893c-1.075.64-1.72.166-1.44-1.059l.355-1.547c.065-.293-.05-.7-.26-.913l-1.24-1.25c-.734-.736-.494-1.482.526-1.653l1.594-.267c.27-.046.59-.283.71-.53l.88-1.774c.237-.48.55-.721.864-.722zm0 0h.002M7.5 10.422l.49.293c1.07.64 1.72.161 1.44-1.059L9.077 8.11c-.065-.293.05-.7.26-.913l1.24-1.25c.73-.736.494-1.482-.525-1.653l-1.595-.267a1.09 1.09 0 01-.705-.53L7.5 2.99"
+                  stroke="orange"
+                  strokeWidth={1.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </Svg>
+              <Text>4.5 (100 sold)</Text>
+            </View>
+            <View style={styles.cartStyle}>
+              <Text style={styles.specialOfferPrice}>{item.price | '0'} USD</Text>
+              <Svg
+                width={37}
+                height={28}
+                viewBox="0 0 37 28"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <Rect
+                  x={0.5}
+                  width={36}
+                  height={28}
+                  rx={8}
+                  fill="#0072C6"
+                  fillOpacity={0.12}
+                />
+                <Path
+                  d="M14.67 16.439l-.581-3.471c-.095-.565-.142-.847.004-1.033.145-.185.414-.185.952-.185h6.91c.538 0 .807 0 .952.185.146.186.099.468.004 1.033l-.582 3.471c-.204 1.224-.307 1.836-.713 2.199-.406.362-.99.362-2.156.362h-1.92c-1.167 0-1.75 0-2.156-.362-.406-.363-.508-.975-.714-2.199zM16 11.75v-.25a2.5 2.5 0 015 0v.25M14.75 16.75h7.5"
+                  stroke="#0072C6"
+                />
+              </Svg>
+            </View>
+          </View>
         </View>
-        <Image source={item.image} style={styles.specialOfferImage} />
-      </View>
-      <View style={styles.specialOfferTextContainer}>
-        <Text style={styles.specialOfferTitle}>{item.title}</Text>
-        <Text style={styles.description}>{item.description}</Text>
-        <View style={styles.ratingStyle}>
-          <Svg
-            width={12}
-            height={12}
-            viewBox="0 0 12 12"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <Path
-              d="M6 1l.002 8.702c-.18 0-.36.04-.496.12l-1.495.893c-1.075.64-1.72.166-1.44-1.059l.355-1.547c.065-.293-.05-.7-.26-.913l-1.24-1.25c-.734-.736-.494-1.482.526-1.653l1.594-.267c.27-.046.59-.283.71-.53l.88-1.774c.237-.48.55-.721.864-.722z"
-              fill="orange"
-            />
-            <Path
-              d="M6 1l.002 8.702c-.18 0-.36.04-.496.12l-1.495.893c-1.075.64-1.72.166-1.44-1.059l.355-1.547c.065-.293-.05-.7-.26-.913l-1.24-1.25c-.734-.736-.494-1.482.526-1.653l1.594-.267c.27-.046.59-.283.71-.53l.88-1.774c.237-.48.55-.721.864-.722zm0 0h.002M7.5 10.422l.49.293c1.07.64 1.72.161 1.44-1.059L9.077 8.11c-.065-.293.05-.7.26-.913l1.24-1.25c.73-.736.494-1.482-.525-1.653l-1.595-.267a1.09 1.09 0 01-.705-.53L7.5 2.99"
-              stroke="orange"
-              strokeWidth={1.5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </Svg>
-          <Text>4.5 (100sold)</Text>
-        </View>
+      </Pressable>
+    );
+  };
+  
 
-        <View style={styles.cartStyle}>
-          <Text style={styles.specialOfferPrice}> {item.price} </Text>
-          <Svg
-            width={37}
-            height={28}
-            viewBox="0 0 37 28"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <Rect
-              x={0.5}
-              width={36}
+  const renderFeaturedSneakersItem = ({ item, index }) => {
+
+    return  (
+      <View key={index} style={styles.specialOfferItemContainer}>
+        <View style={styles.imageColor}>
+          <View style={styles.likeStyle}>
+            <Svg
+              width={32}
+              height={31}
+              viewBox="0 0 32 31"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <Rect
+                x={0.5}
+                width={30.8}
+                height={30.8}
+                rx={15.4}
+                fill="#000"
+                fillOpacity={0.6}
+              />
+              <Path
+                d="M21.497 9.396c-2.01-1.234-3.766-.737-4.82.055-.433.325-.65.487-.777.487s-.343-.162-.775-.487c-1.055-.792-2.81-1.29-4.822-.055-2.64 1.619-3.236 6.96 2.852 11.466 1.16.859 1.74 1.288 2.745 1.288 1.006 0 1.586-.43 2.746-1.287 6.088-4.507 5.49-9.848 2.851-11.467z"
+                stroke="#fff"
+                strokeWidth={1.5}
+                strokeLinecap="round"
+              />
+            </Svg>
+          </View>
+          <Image source={{ uri:`${baseUrl}/${item.photos?.[0]?.url}` }} style={styles.specialOfferImage} />
+        </View>
+        <View style={styles.specialOfferTextContainer}>
+          <Text style={styles.description}>{item.name}</Text>
+          <Text style={styles.specialOfferTitle}>{item.description}</Text>
+          <View style={styles.ratingStyle}>
+            <Svg
+              width={12}
+              height={12}
+              viewBox="0 0 12 12"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <Path
+                d="M6 1l.002 8.702c-.18 0-.36.04-.496.12l-1.495.893c-1.075.64-1.72.166-1.44-1.059l.355-1.547c.065-.293-.05-.7-.26-.913l-1.24-1.25c-.734-.736-.494-1.482.526-1.653l1.594-.267c.27-.046.59-.283.71-.53l.88-1.774c.237-.48.55-.721.864-.722z"
+                fill="orange"
+              />
+              <Path
+                d="M6 1l.002 8.702c-.18 0-.36.04-.496.12l-1.495.893c-1.075.64-1.72.166-1.44-1.059l.355-1.547c.065-.293-.05-.7-.26-.913l-1.24-1.25c-.734-.736-.494-1.482.526-1.653l1.594-.267c.27-.046.59-.283.71-.53l.88-1.774c.237-.48.55-.721.864-.722zm0 0h.002M7.5 10.422l.49.293c1.07.64 1.72.161 1.44-1.059L9.077 8.11c-.065-.293.05-.7.26-.913l1.24-1.25c.73-.736.494-1.482-.525-1.653l-1.595-.267a1.09 1.09 0 01-.705-.53L7.5 2.99"
+                stroke="orange"
+                strokeWidth={1.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </Svg>
+            <Text>4.5 (100 sold)</Text>
+          </View>
+          <View style={styles.cartStyle}>
+            <Text style={styles.specialOfferPrice}>{item.price | '0'} USD</Text>
+            <Svg
+              width={37}
               height={28}
-              rx={8}
-              fill="#0072C6"
-              fillOpacity={0.12}
-            />
-            <Path
-              d="M14.67 16.439l-.581-3.471c-.095-.565-.142-.847.004-1.033.145-.185.414-.185.952-.185h6.91c.538 0 .807 0 .952.185.146.186.099.468.004 1.033l-.582 3.471c-.204 1.224-.307 1.836-.713 2.199-.406.362-.99.362-2.156.362h-1.92c-1.167 0-1.75 0-2.156-.362-.406-.363-.508-.975-.714-2.199zM16 11.75v-.25a2.5 2.5 0 015 0v.25M14.75 16.75h7.5"
-              stroke="#0072C6"
-            />
-          </Svg>
+              viewBox="0 0 37 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <Rect
+                x={0.5}
+                width={36}
+                height={28}
+                rx={8}
+                fill="#0072C6"
+                fillOpacity={0.12}
+              />
+              <Path
+                d="M14.67 16.439l-.581-3.471c-.095-.565-.142-.847.004-1.033.145-.185.414-.185.952-.185h6.91c.538 0 .807 0 .952.185.146.186.099.468.004 1.033l-.582 3.471c-.204 1.224-.307 1.836-.713 2.199-.406.362-.99.362-2.156.362h-1.92c-1.167 0-1.75 0-2.156-.362-.406-.363-.508-.975-.714-2.199zM16 11.75v-.25a2.5 2.5 0 015 0v.25M14.75 16.75h7.5"
+                stroke="#0072C6"
+              />
+            </Svg>
+          </View>
         </View>
       </View>
-    </View>
-  );
-
-  const renderFeaturedSneakersItem = ({ item, index }) => (
-    <View key={index} style={styles.specialOfferItemContainer}>
-      <View style={styles.imageColor}>
-        <View style={styles.likeStyle}>
-          <Svg
-            width={32}
-            height={31}
-            viewBox="0 0 32 31"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <Rect
-              x={0.5}
-              width={30.8}
-              height={30.8}
-              rx={15.4}
-              fill="#000"
-              fillOpacity={0.6}
-            />
-            <Path
-              d="M21.497 9.396c-2.01-1.234-3.766-.737-4.82.055-.433.325-.65.487-.777.487s-.343-.162-.775-.487c-1.055-.792-2.81-1.29-4.822-.055-2.64 1.619-3.236 6.96 2.852 11.466 1.16.859 1.74 1.288 2.745 1.288 1.006 0 1.586-.43 2.746-1.287 6.088-4.507 5.49-9.848 2.851-11.467z"
-              stroke="#fff"
-              strokeWidth={1.5}
-              strokeLinecap="round"
-            />
-          </Svg>
-        </View>
-        <Image source={item.image} style={styles.specialOfferImage} />
-      </View>
-      <View style={styles.specialOfferTextContainer}>
-        <Text style={styles.specialOfferTitle}>{item.title}</Text>
-        <Text style={styles.description}>{item.description}</Text>
-        <View style={styles.ratingStyle}>
-          <Svg
-            width={12}
-            height={12}
-            viewBox="0 0 12 12"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <Path
-              d="M6 1l.002 8.702c-.18 0-.36.04-.496.12l-1.495.893c-1.075.64-1.72.166-1.44-1.059l.355-1.547c.065-.293-.05-.7-.26-.913l-1.24-1.25c-.734-.736-.494-1.482.526-1.653l1.594-.267c.27-.046.59-.283.71-.53l.88-1.774c.237-.48.55-.721.864-.722z"
-              fill="orange"
-            />
-            <Path
-              d="M6 1l.002 8.702c-.18 0-.36.04-.496.12l-1.495.893c-1.075.64-1.72.166-1.44-1.059l.355-1.547c.065-.293-.05-.7-.26-.913l-1.24-1.25c-.734-.736-.494-1.482.526-1.653l1.594-.267c.27-.046.59-.283.71-.53l.88-1.774c.237-.48.55-.721.864-.722zm0 0h.002M7.5 10.422l.49.293c1.07.64 1.72.161 1.44-1.059L9.077 8.11c-.065-.293.05-.7.26-.913l1.24-1.25c.73-.736.494-1.482-.525-1.653l-1.595-.267a1.09 1.09 0 01-.705-.53L7.5 2.99"
-              stroke="orange"
-              strokeWidth={1.5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </Svg>
-          <Text>4.5 (100sold)</Text>
-        </View>
-
-        <View style={styles.cartStyle}>
-          <Text style={styles.specialOfferPrice}> {item.price} </Text>
-          <Svg
-            width={37}
-            height={28}
-            viewBox="0 0 37 28"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <Rect
-              x={0.5}
-              width={36}
-              height={28}
-              rx={8}
-              fill="#0072C6"
-              fillOpacity={0.12}
-            />
-            <Path
-              d="M14.67 16.439l-.581-3.471c-.095-.565-.142-.847.004-1.033.145-.185.414-.185.952-.185h6.91c.538 0 .807 0 .952.185.146.186.099.468.004 1.033l-.582 3.471c-.204 1.224-.307 1.836-.713 2.199-.406.362-.99.362-2.156.362h-1.92c-1.167 0-1.75 0-2.156-.362-.406-.363-.508-.975-.714-2.199zM16 11.75v-.25a2.5 2.5 0 015 0v.25M14.75 16.75h7.5"
-              stroke="#0072C6"
-            />
-          </Svg>
-        </View>
-      </View>
-    </View>
-  );
+    )
+  };
 
   return (
     <ScrollView>
@@ -384,21 +334,23 @@ export default function Index() {
         </View>
 
         {/* Special Offers Section */}
-        <View style={styles.specialOffersHeader}>
-          <Text style={styles.specialOffersText}>Our Special Offers</Text>
-        </View>
-        <FlatList
-          data={specialOffersData}
-          renderItem={renderSpecialOfferItem}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={2}
-          columnWrapperStyle={styles.specialOffersRow}
-          showsVerticalScrollIndicator={false}
-        />
+        <Pressable android_ripple={{ color: "#007bff" }}>
+          <View style={styles.specialOffersHeader}>
+            <Text style={styles.specialOffersText}>Our Special Offers</Text>
+          </View>
+          <FlatList
+            data={specialOffersData}
+            renderItem={({ item, index }) => renderSpecialOfferItem({ item, index, navigation })}
+            keyExtractor={(item) => item.id.toString()}
+            numColumns={2}
+            columnWrapperStyle={styles.specialOffersRow}
+            showsVerticalScrollIndicator={false}
+          />
+        </Pressable>
 
         {/* Featured Sneakers Section */}
         <View style={styles.specialOffersHeader}>
-          <Text style={styles.specialOffersText}>Featured Sneakers</Text>
+          <Text style={styles.specialOffersText}>Featured Bags</Text>
         </View>
         <FlatList
           data={featuredSneakersData}
@@ -547,7 +499,7 @@ const styles = StyleSheet.create({
   },
   specialOfferTitle: {
     fontSize: 12,
-    textAlign: "center",
+    textAlign: "start",
     marginBottom: 5,
   },
   description: {
@@ -587,22 +539,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    gap: 30,
+    gap: 50,
     marginTop: 10,
   },
   buttonContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
     marginTop: 20,
   },
   buttonStyle: {
-    backgroundColor: '#007bff',
+    backgroundColor: "#007bff",
     borderRadius: 5,
     padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     width: 120,
   },
 });
